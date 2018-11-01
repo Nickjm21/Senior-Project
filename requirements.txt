@@ -1,9 +1,13 @@
 autopep8==1.4
 certifi==2018.8.24
 chardet==3.0.4
+cycler==0.10.0
+ffmpeg==1.4
 future==0.16.0
 idna==2.7
 jedi==0.13.1
+kiwisolver==1.0.1
+matplotlib==3.0.0
 mccabe==0.6.1
 numpy==1.15.2
 parso==0.3.1
@@ -11,10 +15,13 @@ pluggy==0.7.1
 pycodestyle==2.4.0
 pydocstyle==2.1.1
 pyflakes==2.0.0
+pyparsing==2.2.2
+python-dateutil==2.7.3
 python-jsonrpc-server==0.0.2
 python-language-server==0.21.2
 requests==2.19.1
 rope==0.11.0
+scipy==1.1.0
 six==1.11.0
 snowballstemmer==1.2.1
 urllib3==1.23

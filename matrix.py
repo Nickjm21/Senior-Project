@@ -36,6 +36,3 @@ d = np.array([7.-1.j, 18.+4.j, -7.5j, 4.-7.j], dtype=complex)
 # TDMAsolver(a, b, c, d)
 # compare against numpy linear algebra library
 # np.linalg.solve(A, d)
-
-print(TDMAsolver(a, b, c, d))
-print(np.linalg.solve(A, d))
