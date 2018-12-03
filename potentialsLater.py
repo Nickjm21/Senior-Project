@@ -15,7 +15,7 @@ def test():
 omega = np.sqrt(c.ko / c.mass)
 
 
-class PotFuncs(cmd.Cmd):
+class PotClass(cmd.Cmd):
     intro = \
         'This program will use the Crank-Nicolson to propegate a Gaussian '\
         'wavepacket in \n various potential functions. Type help or ? for a' \
@@ -56,5 +56,7 @@ class PotFuncs(cmd.Cmd):
             self.file = None
 
 
-if __name__ == '__main__':
-    PotFuncs().cmdloop()
+# if __name__ == '__main__':
+#    PotClass().cmdloop()
+
+potfuncs = PotClass()

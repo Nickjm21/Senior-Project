@@ -1,44 +1,76 @@
 import numpy as np
-import cmd
 import matplotlib.pyplot as plt
-import potentials
-import abc
+# import potActual
 import config as c
 from TDMsolver import TDMAsolver
 TDMA = TDMAsolver
 
 '''
-This file is a Crank-Nicolson (CN) approximation to the time evolution
+This file simulates a Crank-Nicolson (CN) approximation to the time evolution
 operator in QM. Units are as follows:
 - Length in nanometers (nm)
 - Time in femtoseconds (fm)
 - Energies in electronvolts (eV)
 '''
 
-abc.num
+omega = np.sqrt(c.ko / c.mass)
 
-print(potentials.potfuncs)
-print(TDMAsolver)
-# Establishing potential function
-pot = 0
+# Establishing potential function:
+
+print(
+    "This file simulates a Crank-Nicolson (CN) approximation to the time-\
+evolution \n operator in QM. Which potential would you like to use? \
+\n Currently working: \n -Free Particle (free) \n In progress: \n -Simple \
+harmonic oscilator (SHO) \n -Math methods potetial (MM) \
+")
+
+potchoice = input()
+
+if potchoice == 'free':
+    def pot(x):
+        val = 0 * x
+        return val
+if potchoice == 'SHO':
+    def pot(x):
+        val = (1 / 2) * c.mass * (omega ** 2) * (x ** 2)
+        return val
+if potchoice == 'MM':
+    def pot(x):
+        val = c.Vo * np.exp(
+            -((x - c.x1) ** 2)
+            / 2 * (c.a ** 2)
+        )
+        return val
+if potchoice == 'box':
+    def pot(x):
+        if x < (3 * c.N / 5):
+            val = 0
+        else:
+            val = 100
+        return val
+
 
 # Elements of the time evo matrix:
 
 alpha = (c.dt * c.hbar)/(4 * c.mass * (c.dx**2))
+u = np.zeros((c.N, 1), dtype=complex)
 
-ui = (c.dt / (2 * c.hbar)) * pot
+for i in range(c.N):
+    u[i, :] = pot((i-(c.N / 2)) * c.dx)
 
 
+pot((0-(c.N / 2)) * c.dx)
+(c.N / 2)
 # Functions that the initial wavefunction can take
 def Gaussian(x):
     val = np.exp(-(x ** 2))
     return(val)
 
 
-def NormGauss(a, x):
-    val = (a ** (-1/2)) * ((2*np.pi) ** (-1/4)) \
+def NormGauss(x):
+    val = (c.a ** (-1/2)) * ((2*np.pi) ** (-1/4)) \
         * (np.exp(1j * c.ko * x)) \
-        * (np.exp((-x ** 2) / (4 * (a ** 2))))
+        * (np.exp((-x ** 2) / (4 * (c.a ** 2))))
     return val
 
 
@@ -77,21 +109,20 @@ tevo1bot = np.zeros((c.N-1, 1), dtype=complex)
 for i in range(c.N):
     if i == 0:
         tevo2[i, :] = [
-            1 - 2j * alpha - 1j * ui if j == 0
+            1 - 2j * alpha - 1j * u[i, :] if j == 0
             else 1j * alpha if j == 1
             else 0 for j in range(c.N)]
     if i == c.N:
         tevo2[i, :] = [
             1j * alpha if j == c.N - 1
-            else 1 - 2j * alpha - 1j * ui if j == c.N
+            else 1 - 2j * alpha - 1j * u[i, :] if j == c.N
             else 0 for j in range(c.N)]
     else:
         tevo2[i, :] = [
             1j * alpha if j == i - 1 or j == i + 1
-            else 1 - 2j * alpha - 1j * ui if j == i
+            else 1 - 2j * alpha - 1j * u[i, :] if j == i
             else 0 for j in range(c.N)]
 
-print(tevo2)
 
 # Filling the wavefunction
 for i in range(c.N):
@@ -110,7 +141,7 @@ for i in range(c.N-1):
 # Filling in the middle diagonal parts of the two matricies for the TDMA solver
 # Again tevo2 doesn't need to be filled this way.
 for i in range(c.N):
-    tevo1diag[i, :] = 1 + 2j*alpha + 1j*ui
+    tevo1diag[i, :] = 1 + 2j*alpha + 1j * u[i, :]
     # tevo2diag[i, :] = 1 - 2j*alpha - 1j*ui
 
 
@@ -119,15 +150,21 @@ def timeEvo(num, wavefunction):
         partialevo = np.matmul(tevo2, wavefunction)
         evowavefunc = TDMA(tevo1bot, tevo1diag, tevo1top, partialevo)
         wavefunction = evowavefunc
+        if np.greater(checknorm(evowavefunc)[0], np.float64(10. ** -13)):
+            print("The wavefunction is not normalized at time: ", i)
 
     return evowavefunc
 
 
-timeEvo(10, wavfunc)
+u
+wavfunc
+timeEvo(1, wavfunc)
 
-plt.plot(abs(wavfunc))
-plt.plot(abs(timeEvo(100, wavfunc)))
+# plt.plot(abs(wavfunc))
+# plt.plot(abs(timeEvo(100, wavfunc)))
 
-for i in range(1, 10):
+# checknorm(timeEvo(3000, wavfunc))[0]
+
+'''for i in range(1, 10):
     if np.greater(checknorm(timeEvo(i, wavfunc))[0], np.float64(10. ** -13)):
-        print(i)
+        print(i)'''
