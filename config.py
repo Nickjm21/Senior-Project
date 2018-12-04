@@ -8,8 +8,8 @@ xo = -10  # nm
 deltax = 1  # nm
 deltap = hbar / (2 * deltax)  # (eV fs)/nm
 
-xmin = -25  # (nm)
-xmax = 25  # (nm)
+xmin = -25.  # (nm)
+xmax = 25.  # (nm)
 N = 100  # Number of points
 dx = (xmax - xmin) / N  # Size of position steps (1/nm)
 nsteps = 1  # Number of time steps

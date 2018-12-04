@@ -38,7 +38,7 @@ if potchoice == 'MM':
     def pot(x):
         val = c.Vo * np.exp(
             -((x - c.x1) ** 2)
-            / 2 * (c.a ** 2)
+            / (2 * (c.a ** 2))
         )
         return val
 if potchoice == 'box':
@@ -56,11 +56,9 @@ alpha = (c.dt * c.hbar)/(4 * c.mass * (c.dx**2))
 u = np.zeros((c.N, 1), dtype=complex)
 
 for i in range(c.N):
-    u[i, :] = pot((i-(c.N / 2)) * c.dx)
+    u[i, :] = (c.dt / (2 * c.hbar)) * pot(c.xmin + (i * c.dx))
 
 
-pot((0-(c.N / 2)) * c.dx)
-(c.N / 2)
 # Functions that the initial wavefunction can take
 def Gaussian(x):
     val = np.exp(-(x ** 2))
@@ -153,12 +151,12 @@ def timeEvo(num, wavefunction):
         if np.greater(checknorm(evowavefunc)[0], np.float64(10. ** -13)):
             print("The wavefunction is not normalized at time: ", i)
 
-    return evowavefunc
+    return wavefunction
 
 
-u
 wavfunc
 timeEvo(1, wavfunc)
+
 
 # plt.plot(abs(wavfunc))
 # plt.plot(abs(timeEvo(100, wavfunc)))
