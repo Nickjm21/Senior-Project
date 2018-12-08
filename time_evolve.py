@@ -5,6 +5,7 @@ import config as c
 from TDMsolver import TDMAsolver
 TDMA = TDMAsolver
 
+
 '''
 This file simulates a Crank-Nicolson (CN) approximation to the time evolution
 operator in QM. Units are as follows:
@@ -43,11 +44,18 @@ if potchoice == 'MM':
         return val
 if potchoice == 'box':
     def pot(x):
-        if x < (3 * c.N / 5):
-            val = 0
+        if x > (c.potmin) and x < (c.potmax):
+            val = 1
         else:
-            val = 100
+            val = 0
         return val
+
+
+# pottest = np.zeros((c.N, 1), dtype=complex)
+# for i in range(c.N):
+#     pottest[i, :] = pot(c.xmin + (i * c.dx))
+
+# plt.plot(abs(pottest))
 
 
 # Elements of the time evo matrix:
@@ -55,8 +63,13 @@ if potchoice == 'box':
 alpha = (c.dt * c.hbar)/(4 * c.mass * (c.dx**2))
 u = np.zeros((c.N, 1), dtype=complex)
 
+plt.plot(abs(u))
+
+
 for i in range(c.N):
     u[i, :] = (c.dt / (2 * c.hbar)) * pot(c.xmin + (i * c.dx))
+
+# plt.plot(abs(u))
 
 
 # Functions that the initial wavefunction can take
@@ -72,11 +85,11 @@ def NormGauss(x):
     return val
 
 
-def MMGauss(x):
+def MMGauss(x, k):
     val = ((2 * np.pi * (c.deltax ** 2)) ** (-1/4)) \
         * (np.exp(
             -((x - c.xo) ** 2) / (4 * (c.deltax ** 2))
-            + 1j * c.ko * x
+            + 1j * k * x
         ))
     return val
 
@@ -124,7 +137,8 @@ for i in range(c.N):
 
 # Filling the wavefunction
 for i in range(c.N):
-    wavfunc[i, :] = MMGauss((i-(c.N / 2)) * c.dx)
+    wavfunc[i, :] = MMGauss((i-(c.N / 2)) * c.dx, 100 * c.ko)
+
 
 # Filling in the top and bottom parts of the two matricies for the TDMA solver.
 # tevo2 doesn't need to be filled for this part because tevo1 is the matrix
@@ -154,15 +168,15 @@ def timeEvo(num, wavefunction):
     return wavefunction
 
 
-wavfunc
-timeEvo(1, wavfunc)
+# Various plots
+
+# plt.plot(abs(wavfunc))
+# plt.plot(abs((timeEvo(300, wavfunc) ** 2)))
 
 
 # plt.plot(abs(wavfunc))
-# plt.plot(abs(timeEvo(100, wavfunc)))
+# plt.plot(abs((timeEvo(1, wavfunc) ** 2)))
 
-# checknorm(timeEvo(3000, wavfunc))[0]
 
-'''for i in range(1, 10):
-    if np.greater(checknorm(timeEvo(i, wavfunc))[0], np.float64(10. ** -13)):
-        print(i)'''
+
+# checknorm(timeEvo(300, wavfunc))[0]
