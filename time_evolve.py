@@ -51,11 +51,23 @@ if potchoice == 'box':
         return val
 
 
-# pottest = np.zeros((c.N, 1), dtype=complex)
-# for i in range(c.N):
-#     pottest[i, :] = pot(c.xmin + (i * c.dx))
+pottest = np.zeros((c.N, 1), dtype=complex)
+for i in range(c.N):
+    pottest[i, :] = pot(c.xmin + (i * c.dx))
 
-# plt.plot(abs(pottest))
+plt.plot(abs(pottest))
+
+xarray = np.arange(c.xmin, c.xmax, c.dx)
+
+fig, ax = plt.subplots()
+ax.plot(xarray, abs(pottest))
+
+ax.set(xlabel='x', ylabel='V',
+       title='Potential Barrier')
+ax.grid()
+
+fig.savefig("Potential.png")
+plt.show()
 
 
 # Elements of the time evo matrix:
@@ -137,7 +149,7 @@ for i in range(c.N):
 
 # Filling the wavefunction
 for i in range(c.N):
-    wavfunc[i, :] = MMGauss((i-(c.N / 2)) * c.dx, 100 * c.ko)
+    wavfunc[i, :] = MMGauss((i-(c.N / 2)) * c.dx, c.ko)
 
 
 # Filling in the top and bottom parts of the two matricies for the TDMA solver.
@@ -167,16 +179,45 @@ def timeEvo(num, wavefunction):
 
     return wavefunction
 
-
 # Various plots
 
-# plt.plot(abs(wavfunc))
+
+time300 = timeEvo(300, wavfunc)
+
+
+plt.plot(abs(timeEvo(1, wavfunc) ** 2))
+plt.plot(abs(timeEvo(300, wavfunc) ** 2))
+
+fig, ax = plt.subplots()
+ax.plot(xarray, abs(pottest / 3), xarray, abs(timeEvo(300, wavfunc) ** 2), xarray, abs(timeEvo(1, wavfunc) ** 2))
+
+ax.set(xlabel='x', ylabel='Psi and V',
+       title='Collision with Barrier')
+ax.grid()
+
+fig.savefig("BeforeAfter.png")
+plt.show()
+
+
+# plt.plot(abs(wavfunc) ** 2)
 # plt.plot(abs((timeEvo(300, wavfunc) ** 2)))
 
+# plt.plot(abs(wavfunc) ** 2)
+# plt.plot(abs((timeEvo(300, wavfunc) ** 2)))
 
-# plt.plot(abs(wavfunc))
-# plt.plot(abs((timeEvo(1, wavfunc) ** 2)))
-
-
+# plt.plot(abs(wavfunc) ** 2)
+# plt.plot(abs((timeEvo(300, wavfunc)) ** 2))
 
 # checknorm(timeEvo(300, wavfunc))[0]
+
+xarray = np.arange(c.xmin, c.xmax, c.dx)
+
+fig, ax = plt.subplots()
+ax.plot(xarray, abs(pottest / 3), xarray, abs(timeEvo(120, wavfunc) ** 2))
+
+ax.set(xlabel='x', ylabel='Psi and V',
+       title='Collision with Barrier')
+ax.grid()
+
+fig.savefig("Collision.png")
+plt.show()

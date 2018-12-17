@@ -1,4 +1,5 @@
 # File to easily share variables acorss multiple modules
+import numpy as np
 
 # Defining variables
 mass = 5.68563  # eV/(nm/fs)^2
@@ -22,4 +23,12 @@ x1 = -5  # nm
 potmin = 0  # nm
 potmax = 2  # nm
 
-(ko * mass) / (2 * hbar)
+
+def deltaE(k):
+    val = (
+        np.sqrt(
+        ((hbar ** 2) * (8 * (k ** 2) * (deltax ** 2) + 1))
+        / ((mass ** 2) * (deltax ** 4))) / (4 * np.sqrt(2)))
+    return val
+
+deltaE(10)

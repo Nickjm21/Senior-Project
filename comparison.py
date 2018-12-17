@@ -41,21 +41,62 @@ def finalarray(t):
 
 def difference(t):
     for i in range(c.N):
-        diffarray[i, :] = finalarray(t)[i, :] \
+        diffarray[i, :] = finalarray(t * c.dt)[i, :] \
             - timeEvo(t, wavfuncinitial)[i, :]
+        print(i)
     return diffarray
+
+
+evo300 = timeEvo(300, wavfuncinitial)
+
+plt.plot(abs(evo300))
+plt.plot(abs(finalarray(8.5)) ** 1.8)
+
+def difference2(t):
+    for i in range(c.N):
+        diffarray[i, :] = abs(finalarray(t * 0.028333)[i, :]) ** 2 \
+            - abs(evo300[i, :])
+        print(i)
+    return diffarray
+
+
+diff300 = difference2(300)
+
+
+plt.plot(abs(finalarray(50)) ** 2)
+
+plt.plot(abs(diff300) ** 2)
+
+xarray = np.arange(c.xmin, c.xmax, c.dx)
+
+fig, ax = plt.subplots()
+ax.plot(xarray, abs(diff300) ** 2)
+
+ax.set(xlabel='x', ylabel='Difference in Psi',
+       title='Difference Between Theory and Expirement')
+ax.grid()
+
+fig.savefig("Difference.png")
+plt.show()
+
+
+
+
 
 
 plt.plot(abs(difference(1)))
 
-plt.plot(abs(timeEvo(100, wavfuncinitial)))
-plt.plot(abs(finalarray(10)))
+plt.plot(abs(difference(300)) ** 2)
 
-plt.plot(abs(timeEvo(10, wavfuncinitial)))
-plt.plot(abs(timeEvo(100, wavfuncinitial)))
-plt.plot(abs(timeEvo(150, wavfuncinitial)))
-plt.plot(abs(timeEvo(200, wavfuncinitial)))
-plt.plot(abs(finalarray(1)))
-plt.plot(abs(finalarray(10)))
-plt.plot(abs(finalarray(15)))
-plt.plot(abs(finalarray(20)))
+
+plt.plot(abs(timeEvo(100, wavfuncinitial)) ** 2)
+plt.plot(abs(finalarray(10)) ** 2)
+
+'''plt.plot(abs(timeEvo(10, wavfuncinitial)) ** 2)
+plt.plot(abs(timeEvo(100, wavfuncinitial)) ** 2)
+plt.plot(abs(timeEvo(150, wavfuncinitial)) ** 2)
+plt.plot(abs(timeEvo(200, wavfuncinitial)) ** 2)
+plt.plot(abs(finalarray(1)) ** 2)
+plt.plot(abs(finalarray(10)) ** 2)
+plt.plot(abs(finalarray(15)) ** 2)
+plt.plot(abs(finalarray(20)) ** 2)'''
